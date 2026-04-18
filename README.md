@@ -104,11 +104,11 @@ ImageResolver/
 
 | Module | Purpose |
 |--------|---------|
-| **main.py** | Entry point aplikasi. Validasi tkinter dan Pillow dependencies, kemudian menjalankan GUI. |
-| **src/app.py** | Kelas `App` (tkinter.Tk) yang handle seluruh UI dan aplikasi logic. Terdiri dari 3 tab: Konversi, Resize, Batch. |
-| **src/image_processor.py** | Fungsi core untuk image processing: `open_image()` (buka SVG/PDF/gambar), `save_image()` (simpan dengan konversi mode), dan `do_resize()` (resize dengan berbagai mode). |
-| **src/constants.py** | Konstanta global: format output, mapping ekstensi file, set ekstensi input, mode konversi, dan konfigurasi lainnya. |
-| **src/ui_components.py** | Komponen dan utility reusable: kelas `Tooltip` untuk hover hints, dan fungsi parser (`int_or_none`, `float_or_none`, `filetypes_input`). |
+| **main.py** | Entry point application. Validate tkinter and Pillow dependencies, and to run GUI. |
+| **src/app.py** | Kelas `App` (tkinter.Tk) handling UI and logic. contains 3 tab: Conversion, Resize, Batch. |
+| **src/image_processor.py** | Core function for image processing: `open_image()` (open SVG/PDF/Image), `save_image()` (save with conversion code), and `do_resize()` (resize with different mode). |
+| **src/constants.py** | Global constant: format output, mapping file extension, set input extension, conversion mode, and other conversion. |
+| **src/ui_components.py** | reusable components and utilities: class `Tooltip` for hover hints, and parser function (`int_or_none`, `float_or_none`, `filetypes_input`). |
 
 ## Building Executable (Optional)
 
