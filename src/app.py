@@ -78,9 +78,13 @@ class App(tk.Tk):
         self.log.tag_config("err", foreground="#E24B4A")
         self.log.tag_config("inf", foreground="#185FA5")
 
-        # Progress bar
-        self.progress = ttk.Progressbar(self, mode="indeterminate", length=400)
-        self.progress.pack(fill="x", padx=10, pady=(0, 8))
+        # Progress bar frame dengan label persentase
+        prog_frame = ttk.Frame(self)
+        prog_frame.pack(fill="x", padx=10, pady=(0, 8))
+        self.progress = ttk.Progressbar(prog_frame, mode="determinate", maximum=100, length=400)
+        self.progress.pack(fill="x", side="left", expand=True)
+        self.progress_label = ttk.Label(prog_frame, text="0%", width=5)
+        self.progress_label.pack(side="left", padx=(4, 0))
 
     def _build_single(self, parent, PAD):
         """Build tab Konversi."""
@@ -301,14 +305,22 @@ class App(tk.Tk):
             self.log.configure(state="disabled")
         self.after(0, _write)
 
+    def _update_progress(self, value: int):
+        """Update progress bar ke nilai tertentu (0-100)."""
+        def _update():
+            self.progress["value"] = value
+            self.progress_label.config(text=f"{value}%")
+            self.update_idletasks()
+        self.after(0, _update)
+
     def _set_progress(self, running: bool):
         """Set progress bar running atau stopped."""
         def _toggle():
             if running:
-                self.progress.start(12)
+                self._update_progress(0)
             else:
-                self.progress.stop()
-                self.progress["value"] = 0
+                self._update_progress(100)
+                self.after(500, lambda: self._update_progress(0))
         self.after(0, _toggle)
 
     @staticmethod
@@ -343,16 +355,20 @@ class App(tk.Tk):
         def task():
             self._set_progress(True)
             try:
+                self._update_progress(10)
                 is_svg = Path(src).suffix.lower() == ".svg"
                 if is_svg:
                     img = open_image(Path(src), svg_width=w, svg_height=h, svg_scale=scale)
                 else:
                     img = open_image(Path(src))
+                    self._update_progress(40)
                     if w or h or scale:
                         img = do_resize(img, width=w, height=h, scale=scale, mode=mode)
+                self._update_progress(70)
                 ext   = EXT_MAP.get(fmt, Path(dst).suffix)
                 dst_p = Path(dst).with_suffix(ext)
                 save_image(img, dst_p, quality=qual, fmt_override=fmt)
+                self._update_progress(100)
                 self._log(f"✓  {Path(src).name}  →  {dst_p.name}  {img.size}", "ok")
             except Exception as e:
                 self._log(f"✗  {e}", "err")
@@ -382,14 +398,18 @@ class App(tk.Tk):
         def task():
             self._set_progress(True)
             try:
+                self._update_progress(10)
                 is_svg = Path(src).suffix.lower() == ".svg"
                 if is_svg:
                     img = open_image(Path(src), svg_width=w, svg_height=h, svg_scale=scale)
                 else:
                     img = open_image(Path(src))
+                    self._update_progress(40)
                     img = do_resize(img, width=w, height=h, scale=scale,
                                     max_w=maxw, max_h=maxh, mode=mode)
+                self._update_progress(70)
                 save_image(img, Path(dst), quality=qual)
+                self._update_progress(100)
                 self._log(f"✓  {Path(src).name}  →  {Path(dst).name}  {img.size}", "ok")
             except Exception as e:
                 self._log(f"✗  {e}", "err")
@@ -424,7 +444,8 @@ class App(tk.Tk):
             files = [f for f in sorted(in_p.glob(pattern))
                      if f.is_file() and f.suffix.lower() in INPUT_EXTS]
             self._log(f"→  {len(files)} file ditemukan di {indir}", "inf")
-            for f in files:
+            total = len(files)
+            for idx, f in enumerate(files, 1):
                 dst = out_p / (f.stem + ext_out)
                 try:
                     is_svg = f.suffix.lower() == ".svg"
@@ -440,6 +461,8 @@ class App(tk.Tk):
                 except Exception as e:
                     self._log(f"✗  {f.name}: {e}", "err")
                     err_count += 1
+                progress_pct = int((idx / total) * 100)
+                self._update_progress(progress_pct)
             self._log(f"Selesai: {ok_count} berhasil, {err_count} gagal.", "inf")
             self._set_progress(False)
 

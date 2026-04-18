@@ -1,6 +1,6 @@
 # Image Resolver
 
-A comprehensive GUI application for image format conversion and resizing using Python and tkinter.
+A comprehensive GUI application for quick image format conversion and resizing using Python and tkinter.
 
 ## Features
 
