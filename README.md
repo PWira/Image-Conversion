@@ -30,7 +30,7 @@ A comprehensive GUI application for quick image format conversion and resizing u
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/PWira/Image-Resolver.git
+git clone https://github.com/PWira/Image-Conversion.git
 cd ImageResolver
 ```
 
