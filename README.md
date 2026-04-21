@@ -1,4 +1,4 @@
-# Image Conversion
+# QIF Image Conversion
 
 A comprehensive GUI application for quick image format conversion and resizing using Python and tkinter.
 
