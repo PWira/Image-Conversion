@@ -16,6 +16,7 @@ A comprehensive GUI application for quick image format conversion and resizing u
 
 1. **Conversion** - Convert single image to different format with optional resize
 2. **Resize** - Advanced resize options (scale %, max dimensions, multiple resize modes)
+2. **Crop** - Crop image size
 3. **Batch** - Process multiple images from a folder with consistent settings
 
 ## Requirements
@@ -43,6 +44,7 @@ Or manually:
 ```bash
 pip install Pillow cairosvg pymupdf
 ```
+### Note : use pipx or venv if you are on linux
 
 ## Quick Start
 
@@ -54,6 +56,7 @@ python main.py
 2. Choose a tab based on your needs:
    - **Conversion**: Single image conversion
    - **Resize**: Resize with advanced options
+   - **Crop**: Crop image size
    - **Batch**: Process multiple images
 
 3. Select input file/folder, set options, and click the button
@@ -74,7 +77,10 @@ python main.py
 - Scale by percentage
 - Set maximum width/height constraints
 
-### Tab 3: Batch
+### Tab 3: Crop
+- Crop image size
+
+### Tab 4: Batch
 - Process multiple images from a folder
 - Recursive option to process subfolders
 - Consistent format and quality across all images
